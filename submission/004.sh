@@ -21,15 +21,12 @@ DESCRIPTOR="tr($XPUB/$INDEX)"
 DESCRIPTOR_WITH_CHECKSUM=$(bitcoin-cli -rpcconnect=$RPC_CONNECT -rpcuser=$RPC_USER -rpcpassword=$RPC_PASSWORD getdescriptorinfo "$DESCRIPTOR" | jq -r '.descriptor')
 
 # Usando bitcoin-cli para derivar o endereço
-# ADDRESS=$($EXECUTAR./bitcoin-cli -rpcconnect=$RPC_CONNECT -rpcuser=$RPC_USER -rpcpassword=$RPC_PASSWORD deriveaddresses "$DESCRIPTOR_WITH_CHECKSUM")
+#ADDRESS=$($EXECUTAR./bitcoin-cli -rpcconnect=$RPC_CONNECT -rpcuser=$RPC_USER -rpcpassword=$RPC_PASSWORD deriveaddresses "$DESCRIPTOR_WITH_CHECKSUM")
 ADDRESS=$(bitcoin-cli -rpcconnect=$RPC_CONNECT -rpcuser=$RPC_USER -rpcpassword=$RPC_PASSWORD deriveaddresses "$DESCRIPTOR_WITH_CHECKSUM")
 
-# Validar se o endereço gerado é o esperado
-EXPECTED_ADDRESS="bc1p3yrtpvv6czx63h2sxwmeep8q98h94w4288fc4cvrkqephalydfgszgacf9"
-if [ "$ADDRESS" == "$EXPECTED_ADDRESS" ]; then
-    echo "Endereço correto derivado: $ADDRESS"
-else
-    #echo "Endereço derivado não corresponde ao esperado!"
-    #echo "Derivado: $ADDRESS"
-    echo "$EXPECTED_ADDRESS"
-fi
+#endereço gerado é o esperado
+#EXPECTED_ADDRESS="bc1p3yrtpvv6czx63h2sxwmeep8q98h94w4288fc4cvrkqephalydfgszgacf9"
+ADDRESS_LIMPO=$(echo "$ADDRESS" | jq -r '.[0]')
+
+echo "$ADDRESS_LIMPO"
+

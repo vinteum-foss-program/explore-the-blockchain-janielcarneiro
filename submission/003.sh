@@ -5,7 +5,7 @@
 RPC_CONNECT="84.247.182.145"
 RPC_USER="user_091"
 RPC_PASSWORD="RdTw08robCy5"
-BLOCK_NUMBER=123456  # Substitua pelo número do bloco desejado
+BLOCK_NUMBER=123456  
 #EXECUTAR=/home/janiel/Documentos/bitcoin-28.0-x86_64-linux-gnu/bitcoin-28.0/bin/
 
 # Passo 1: Obter o hash do bloco
