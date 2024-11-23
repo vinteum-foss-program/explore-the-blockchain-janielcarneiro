@@ -4,13 +4,15 @@
 RPC_CONNECT="84.247.182.145"
 RPC_USER="user_091"
 RPC_PASSWORD="RdTw08robCy5"
-EXECUTAR="/home/janiel/Documentos/bitcoin-28.0-x86_64-linux-gnu/bitcoin-28.0/bin/" 
+#EXECUTAR="/home/janiel/Documentos/bitcoin-28.0-x86_64-linux-gnu/bitcoin-28.0/bin/" 
 
 # Obter o hash do bloco 123.321
-HASH_BLOCO=$($EXECUTAR./bitcoin-cli -rpcconnect=$RPC_CONNECT -rpcuser=$RPC_USER -rpcpassword=$RPC_PASSWORD getblockhash 123321)
+#HASH_BLOCO=$($EXECUTAR./bitcoin-cli -rpcconnect=$RPC_CONNECT -rpcuser=$RPC_USER -rpcpassword=$RPC_PASSWORD getblockhash 123321)
+
+HASH_BLOCO=$(bitcoin-cli -rpcconnect=$RPC_CONNECT -rpcuser=$RPC_USER -rpcpassword=$RPC_PASSWORD getblockhash 123321)
 
 # Obter todas as transações do bloco
-TRANSACOES_BLOCO=$($EXECUTAR./bitcoin-cli -rpcconnect=$RPC_CONNECT -rpcuser=$RPC_USER -rpcpassword=$RPC_PASSWORD getblock $HASH_BLOCO 2)
+TRANSACOES_BLOCO=$(bitcoin-cli -rpcconnect=$RPC_CONNECT -rpcuser=$RPC_USER -rpcpassword=$RPC_PASSWORD getblock $HASH_BLOCO 2)
 
 # Extrair os txid de todas as transações
 TRANSACOES=$(echo "$TRANSACOES_BLOCO" | jq -r '.tx[].txid')
@@ -24,11 +26,11 @@ UTXO_ENCONTRADOS=0
 for TX in $TRANSACOES; do
     if [[ ${#TX} -eq 64 ]]; then
         # Obter os detalhes da transação
-        RAW_TX=$($EXECUTAR./bitcoin-cli -rpcconnect=$RPC_CONNECT -rpcuser=$RPC_USER -rpcpassword=$RPC_PASSWORD getrawtransaction $TX 1)
+        RAW_TX=$(bitcoin-cli -rpcconnect=$RPC_CONNECT -rpcuser=$RPC_USER -rpcpassword=$RPC_PASSWORD getrawtransaction $TX 1)
         
         # Loop através de cada saída da transação
         for i in $(seq 0 $(($(echo "$RAW_TX" | jq '.vout | length') - 1))); do
-            UTXO=$($EXECUTAR./bitcoin-cli -rpcconnect=$RPC_CONNECT -rpcuser=$RPC_USER -rpcpassword=$RPC_PASSWORD gettxout $TX $i)
+            UTXO=$(bitcoin-cli -rpcconnect=$RPC_CONNECT -rpcuser=$RPC_USER -rpcpassword=$RPC_PASSWORD gettxout $TX $i)
             
             # Verificar se a saída não está gasta
             if [[ ! -z "$UTXO" ]]; then
